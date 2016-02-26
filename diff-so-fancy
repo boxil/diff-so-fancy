@@ -38,28 +38,28 @@ git_index_line_pattern="^($color_code_regex)index .*"
 
 format_diff_header () {
   # simplify the unified patch diff header
-  $SED -E "/^($color_code_regex)diff --git .*$/d" \
-    | $SED -E "/$git_index_line_pattern/{N;s/$git_index_line_pattern\n//;}" \
-    | $SED -E "s/^($color_code_regex)\-\-\-(.*)$/\1$(print_horizontal_rule)\\${NL}\1\-\-\-\-\5/g" \
-    | $SED -E "s/^($color_code_regex)\+\+\+(.*)$/\1\+\+\+\+\5\\${NL}\1$(print_horizontal_rule)/g"
+  $SED -r "/^($color_code_regex)diff --git .*$/d" \
+    | $SED -r "/$git_index_line_pattern/{N;s/$git_index_line_pattern\n//;}" \
+    | $SED -r "s/^($color_code_regex)\-\-\-(.*)$/\1$(print_horizontal_rule)\\${NL}\1\-\-\-\-\5/g" \
+    | $SED -r "s/^($color_code_regex)\+\+\+(.*)$/\1\+\+\+\+\5\\${NL}\1$(print_horizontal_rule)/g"
 }
 
 colorize_context_line () {
   # extra color for @@ context line
-  $SED -E "s/@@$reset_color $reset_color(.*$)/@@ $dim_magenta\1/g"
+  $SED -r "s/@@$reset_color $reset_color(.*$)/@@ $dim_magenta\1/g"
 }
 
 mark_empty_lines () {
-  $SED -E "s/^$color_code_regex[\+\-]$reset_color\s*$/$invert_color\1 $reset_escape/g"
+  $SED -r "s/^$color_code_regex[\+\-]$reset_color\s*$/$invert_color\1 $reset_escape/g"
 }
 
 strip_leading_symbols () {
   # strip the + and -
-  $SED -E "s/^($color_code_regex)[\+\-]/\1 /g"
+  $SED -r "s/^($color_code_regex)[\+\-]/\1 /g"
 }
 
 strip_first_column () {
-  $SED -E "s/^($color_code_regex)[[:space:]]/\1/g"
+  $SED -r "s/^($color_code_regex)[[:space:]]/\1/g"
 }
 
 print_horizontal_rule () {
